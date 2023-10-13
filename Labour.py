@@ -1,4 +1,4 @@
-def Labour_page():
+def Labour_page(site_num=1):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -16,7 +16,7 @@ def Labour_page():
         myc.execute("create database user_info")
 
     myc.execute("use user_info")
-    myc.execute("create table if not exists users(Name varchar(30), RegNo varchar(15), DOB date, Gender varchar(10), Languages varchar(255), Address varchar(255), Designation varchar(15))")
+    myc.execute("create table if not exists users(Site int, Name varchar(30), RegNo varchar(15), DOB date, Gender varchar(10), Languages varchar(255), Address varchar(255), Designation varchar(15))")
     con.commit()
 
     # Function to validate the form before submission
@@ -61,8 +61,8 @@ def Labour_page():
             languages_string = ", ".join(languages_list)
 
             # SQL insertion query
-            insert_query = "insert into users (Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s)"
-            data = (name, reg_no, dob, gender, languages_string, address, designation)
+            insert_query = "insert into users (Site, Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s, %s)"
+            data = (site_num, name, reg_no, dob, gender, languages_string, address, designation)
 
             try:
                 myc.execute(insert_query, data)
@@ -70,7 +70,7 @@ def Labour_page():
             except mysql.connector.Error as err:
                 print("Error:", err)
 
-
+            print("Site no.:", site_num)
             print("Name:", name)
             print("Registration Number:", reg_no)
             print("Date of Birth:", dob)
@@ -90,7 +90,7 @@ def Labour_page():
 
     # Create main window
     root = tk.Tk()
-    root.title("User Information Form")
+    root.title("Site {} Labour details".format(site_num))
     root.configure(bg=dark_bg)  # Dark background color
 
     # Load your image using the Image class from Pillow
@@ -206,4 +206,3 @@ def Labour_page():
     # Run the Tkinter main loop
     root.mainloop()
 
-Labour_page()

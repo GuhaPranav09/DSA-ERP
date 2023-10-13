@@ -5,6 +5,9 @@ def Login_page():
     from PIL import Image, ImageTk
     import Labour
 
+    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql', database='user_info')
+    myc = con.cursor()
+
     # Function to handle login button click event
     def login():
         # Connect to the MySQL database
@@ -12,19 +15,23 @@ def Login_page():
         myc = con.cursor()
 
         # Retrieve username and password from the entry fields
+        site_num = site_num_entry.get()
         username = username_entry.get()
         password = password_entry.get()
 
         # Check if the login details match the records in the database
-        myc.execute("SELECT * FROM login WHERE username=%s AND password=%s", (username, password))
+        myc.execute("SELECT * FROM login WHERE Site=%s AND username=%s AND password=%s", (site_num, username, password))
         result = myc.fetchone()
 
         # If login details match, close the login window and open the user information window
-        if result:
-            login_window.destroy()  # Close the login window
-            Labour.Labour_page()  # Open the user information window
+        if site_num and username and password:
+            if result:
+                login_window.destroy()  # Close the login window
+                Labour.Labour_page(site_num)  # Open the user information window
+            else:
+                messagebox.showerror("Error", "Invalid login credentials. Please try again.")
         else:
-            messagebox.showerror("Error", "Invalid login credentials. Please try again.")
+            messagebox.showerror("Error", "All fields are mandatory!")
         
 
     # Colors
@@ -50,6 +57,10 @@ def Login_page():
     # Login Label
     login_label = Label(login_window, text="Manager Login", bg=dark_bg, fg=dark_fg, font=('Arial', 20, 'bold'))
 
+    # Site number Label and Entry
+    site_num_label = ttk.Label(login_window, text="Site no.:", style='TLabel')
+    site_num_entry = ttk.Entry(login_window, font=('Arial', 12))
+
     # Username Label and Entry
     username_label = ttk.Label(login_window, text="Username:", style='TLabel')
     username_entry = ttk.Entry(login_window, font=('Arial', 12))
@@ -65,15 +76,17 @@ def Login_page():
 
     # Center all elements
     login_label.grid(row=0, column=0, columnspan=2, pady=20, sticky="nsew")
-    username_label.grid(row=1, column=0, pady=10, sticky="e")
-    username_entry.grid(row=1, column=1, pady=10, sticky="w")
-    password_label.grid(row=2, column=0, pady=10, sticky="e")
-    password_entry.grid(row=2, column=1, pady=10, sticky="w")
-    login_button.grid(row=3, column=0, columnspan=2, pady=20)
+    site_num_label.grid(row=1, column=0, pady=10, sticky="e")
+    site_num_entry.grid(row=1, column=1, pady=10, sticky="w")
+    username_label.grid(row=2, column=0, pady=10, sticky="e")
+    username_entry.grid(row=2, column=1, pady=10, sticky="w") 
+    password_label.grid(row=3, column=0, pady=10, sticky="e")
+    password_entry.grid(row=3, column=1, pady=10, sticky="w")
+    login_button.grid(row=4, column=0, columnspan=2, pady=20)
 
     # Configure grid row and column weights to center everything
     login_window.grid_rowconfigure(0, weight=1)
-    login_window.grid_rowconfigure(3, weight=1)
+    login_window.grid_rowconfigure(4, weight=1)
     login_window.grid_columnconfigure(0, weight=1)
     login_window.grid_columnconfigure(1, weight=1)
 
