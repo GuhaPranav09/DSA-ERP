@@ -3,7 +3,7 @@ def Login_page():
     from tkinter import ttk, Label, messagebox
     import mysql.connector
     from PIL import Image, ImageTk
-    import Home
+    import Labour
 
     # Function to handle login button click event
     def login():
@@ -22,7 +22,7 @@ def Login_page():
         # If login details match, close the login window and open the user information window
         if result:
             login_window.destroy()  # Close the login window
-            Home.Home_page()  # Open the user information window
+            Labour.Labour_page()  # Open the user information window
         else:
             messagebox.showerror("Error", "Invalid login credentials. Please try again.")
         
