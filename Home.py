@@ -1,6 +1,6 @@
 def Home_page():
     import tkinter as tk
-    from tkinter import ttk,Label
+    from tkinter import ttk,Label, messagebox
     import mysql.connector
     import datetime
     from PIL import Image, ImageTk
@@ -31,15 +31,16 @@ def Home_page():
         # Check if all required fields are filled
         if not (name and reg_no and dob != "DDMMYYYY" and gender and address and designation):
             # If any required field is empty, show an error message
-            error_label.config(text="All fields are required!", fg='red')
+            success_label.config(text="")
+            messagebox.showerror("Error", "All fields are required!")
             return False
         elif not (languages_list):
             # If No language is selected, show an error message
-            error_label.config(text="Atleast one language is required!", fg='red')
+            success_label.config(text="")
+            messagebox.showerror("Error", "Atleast one language is required!")
             return False
-        else:   
-            # All fields are filled, clear error message and proceed with form submission
-            error_label.config(text="")
+        else:
+            # All fields are filled, proceed with form submission   
             return True  # Call the submit function
 
     # Function to handle button click event
@@ -78,9 +79,11 @@ def Home_page():
                 print("Project Selection:", designation)
                 print("Address:", address)
                 print("-----------------------------------------\n")
+                success_label.config(text="Data entry successful!", fg='green') 
             except ValueError as val:
-                error_label.config(text="Invalid date format. Please enter the date in DDMMYYYY format!", fg='red')
-                
+                success_label.config(text="")
+                messagebox.showerror("Error", "Invalid date format. Please enter the date in DDMMYYYY format!")
+                        
 
 
     # Colors
@@ -120,7 +123,7 @@ def Home_page():
     designation_label = tk.Label(root, text="Designation:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
 
     # Error Label for displaying validation messages
-    error_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))
+    success_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))
 
     # Entry Fields
     name_entry = tk.Entry(root, font=('Arial',10))
@@ -169,10 +172,10 @@ def Home_page():
     designation_menu=ttk.Combobox(root, textvariable=designation_var, values=options, style='TCombobox')
 
     # Buttons
-    insert_button = ttk.Button(root, text="Insert", command=submit)
+    insert_button = ttk.Button(root, text="Submit", command=submit)
     update_button = ttk.Button(root, text="Update")
     delete_button = ttk.Button(root, text="Delete")
-    view_button = ttk.Button(root, text="View")
+    view_button = ttk.Button(root, text="Clear")
     insert_button.configure(style='TButton')  # Apply the style to the button
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
@@ -204,9 +207,11 @@ def Home_page():
     update_button.grid(row=7, column=2, pady=10)
     delete_button.grid(row=7, column=3, pady=10)
     view_button.grid(row=7, column=4, pady=10)
-    error_label.grid(row=8, column=1, columnspan=4, pady=10)
+    success_label.grid(row=8, column=1, columnspan=4, pady=10)
     image_label.grid(row=0, column=4, columnspan=3, rowspan=3, sticky="w")  
 
 
     # Run the Tkinter main loop
     root.mainloop()
+
+Home_page()
