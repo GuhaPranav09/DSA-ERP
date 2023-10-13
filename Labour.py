@@ -3,6 +3,7 @@ def Labour_page():
     from tkinter import ttk,Label, messagebox
     import mysql.connector
     import datetime
+    from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
 
 
@@ -42,47 +43,44 @@ def Labour_page():
         else:
             # All fields are filled, proceed with form submission   
             return True  # Call the submit function
+        
 
     # Function to handle button click event
     def submit():
         if validate_form():
             name = name_entry.get()
             reg_no = reg_no_entry.get()
-            input_date = dob_entry.get()
+            input_date = dob_entry.get_date()
+            dob = input_date.strftime("%Y%m%d")
+            gender = gender_var.get()
+            languages_list = [lang for lang, checked in language_vars.items() if checked.get()]
+
+            address = address_text.get("1.0", tk.END).strip()
+            designation = designation_var.get()
+
+            languages_string = ", ".join(languages_list)
+
+            # SQL insertion query
+            insert_query = "insert into users (Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s)"
+            data = (name, reg_no, dob, gender, languages_string, address, designation)
+
             try:
-                dob = datetime.datetime.strptime(input_date, "%d%m%Y").strftime("%Y%m%d")
-                gender = gender_var.get()
-                languages_list = [lang for lang, checked in language_vars.items() if checked.get()]
-
-                address = address_text.get("1.0", tk.END).strip()
-                designation = designation_var.get()
-
-                languages_string = ", ".join(languages_list)
-
-                # SQL insertion query
-                insert_query = "insert into users (Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s)"
-                data = (name, reg_no, dob, gender, languages_string, address, designation)
-
-                try:
-                    myc.execute(insert_query, data)
-                    con.commit()
-                except mysql.connector.Error as err:
-                    print("Error:", err)
+                myc.execute(insert_query, data)
+                con.commit()
+            except mysql.connector.Error as err:
+                print("Error:", err)
 
 
-                print("Name:", name)
-                print("Registration Number:", reg_no)
-                print("Date of Birth:", dob)
-                print("Gender:", gender)
-                print("Languages Known:", languages_string)
-                print(len(languages_string))
-                print("Project Selection:", designation)
-                print("Address:", address)
-                print("-----------------------------------------\n")
-                success_label.config(text="Data entry successful!", fg='green') 
-            except ValueError as val:
-                success_label.config(text="")
-                messagebox.showerror("Error", "Invalid date format. Please enter the date in DDMMYYYY format!")
+            print("Name:", name)
+            print("Registration Number:", reg_no)
+            print("Date of Birth:", dob)
+            print("Gender:", gender)
+            print("Languages Known:", languages_string)
+            print(len(languages_string))
+            print("Project Selection:", designation)
+            print("Address:", address)
+            print("-----------------------------------------\n")
+            success_label.config(text="Data entry successful!", fg='green') 
                         
 
 
@@ -110,7 +108,7 @@ def Labour_page():
     style.configure('TButton', background=dark_bg, foreground=dark_bg, highlightBackground='#404040', highlightColor='#404040',font=('Arial', 10, 'bold'))
     style.configure('TRadiobutton', background=dark_bg, foreground=dark_fg, selectcolor=dark_bg)
     style.configure('TCheckbutton', background=dark_bg, foreground=dark_fg, selectcolor=dark_bg)  
-    style.configure('TCombobox', background=dark_bg, foreground=dark_fg, selectcolor=dark_bg, highlightthickness=0,selectfontcolor=dark_bg)  
+    style.configure('TCombobox', background=dark_bg, selectcolor=dark_bg, highlightthickness=0,selectfontcolor=dark_bg)  
 
 
     # Labels
@@ -126,26 +124,20 @@ def Labour_page():
     success_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))
 
     # Entry Fields
-    name_entry = tk.Entry(root, font=('Arial',10))
-    reg_no_entry = tk.Entry(root, font=('Arial',10))
-
-    #DOB entry field
-    def on_entry_click(event):
-        if dob_entry.get() == "DDMMYYYY":
-            dob_entry.delete(0, tk.END)  # Remove placeholder text when clicked
-            dob_entry.config(fg='black', font=('Arial',10))  # Change text color to black
+    name_entry = tk.Entry(root, font=('Arial',12))
+    reg_no_entry = tk.Entry(root, font=('Arial',12))
 
     # Function to handle entry field focus out event
     def on_focus_out(event):
         if dob_entry.get() == "":
-            dob_entry.insert(0, "DDMMYYY")  # Add placeholder text if no input
-            dob_entry.config(fg='grey', font=('Arial',10, 'italic'))  # Change text color to grey
+            dob_entry.set_date(datetime.date.today())  # Set default date if no input
 
-    # Create the Date of Birth Entry with placeholder text
-    dob_entry = tk.Entry(root, fg='grey', font=('Arial',10, 'italic'))  # Set default text color to grey
-    dob_entry.insert(0, "DDMMYYYY")  # Placeholder text
-    dob_entry.bind('<FocusIn>', on_entry_click)  # Bind click event
-    dob_entry.bind('<FocusOut>', on_focus_out)  # Bind focus out event
+    # Create the Date of Birth Entry with calendar widget
+    dob_entry = DateEntry(root, width=12, background='black', foreground='white', borderwidth=2)
+    dob_entry.config(font=('Arial', 12))  # Change text color and font
+    dob_entry.set_date(datetime.date.today())  # Set default date to today
+    dob_entry.bind('<FocusOut>', on_focus_out)  # Bind focus out event to handle default date setting
+
 
     # Gender Selection
     gender_var = tk.StringVar()
@@ -163,7 +155,7 @@ def Labour_page():
     language_checkboxes = [ttk.Checkbutton(root, text=lang, variable=language_vars[lang], style='TCheckbutton') for lang in language_vars]
 
     # Address Textbox
-    address_text = tk.Text(root, height=5, width=50, wrap=tk.WORD)
+    address_text = tk.Text(root, height=5, width=50, wrap=tk.WORD,font=('Arial', 12))
 
     # Designation Selection
     options = ["Student", "Faculty", "Scholar", "HOD", "Dean"]
