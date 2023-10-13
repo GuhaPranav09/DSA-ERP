@@ -99,7 +99,7 @@ root.iconphoto(True, icon_photo)
 #Image
 user_image = Image.open("user.png")
 user_photo = ImageTk.PhotoImage(user_image)
-image_label = Label(root, image=user_photo)
+image_label = Label(root, image=user_photo, background=dark_bg)
 
 # Set Dark Theme Colors
 style = ttk.Style()
