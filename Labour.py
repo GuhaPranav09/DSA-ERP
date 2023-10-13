@@ -1,4 +1,4 @@
-def Home_page():
+def Labour_page():
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -214,4 +214,4 @@ def Home_page():
     # Run the Tkinter main loop
     root.mainloop()
 
-Home_page()
+Labour_page()
