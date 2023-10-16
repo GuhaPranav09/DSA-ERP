@@ -50,7 +50,7 @@ def Labour_page(site_num=1):
         if validate_form():
             
             reg_no_to_insert = reg_no_entry.get()
-            myc.execute("SELECT * FROM users WHERE RegNo = %s", (reg_no_to_insert,))
+            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site = %s", (reg_no_to_insert,site_num))
             existing_record = myc.fetchone()
             
             if not existing_record:
@@ -82,7 +82,7 @@ def Labour_page(site_num=1):
                 print("Date of Birth:", dob)
                 print("Gender:", gender)
                 print("Languages Known:", languages_string)
-                print("Project Selection:", designation)
+                print("Designation Selection:", designation)
                 print("Address:", address)
                 print("\n")
                 success_label.config(text="Data entry successful!", fg='green') 
@@ -95,7 +95,7 @@ def Labour_page(site_num=1):
             # Get registration number from user input
             reg_no_to_update = reg_no_entry.get()
             # Check if the registration number exists in the database
-            myc.execute("SELECT * FROM users WHERE RegNo = %s", (reg_no_to_update,))
+            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site=%s", (reg_no_to_update,site_num))
             existing_record = myc.fetchone()
 
             if existing_record:
@@ -113,8 +113,8 @@ def Labour_page(site_num=1):
                 new_languages_string = ", ".join(new_languages_list)
 
                 # Update the record in the database
-                update_query = "UPDATE users SET Site=%s, Name = %s, DOB = %s, Gender = %s, Languages = %s, Address = %s, Designation = %s WHERE RegNo = %s"
-                update_data = (site_num, new_name, new_dob, new_gender, new_languages_string, new_address, new_designation, reg_no_to_update)
+                update_query = "UPDATE users SET Name = %s, DOB = %s, Gender = %s, Languages = %s, Address = %s, Designation = %s WHERE RegNo = %s AND Site=%s"
+                update_data = (new_name, new_dob, new_gender, new_languages_string, new_address, new_designation, reg_no_to_update, site_num)
                 
                 myc.execute(update_query, update_data)
                 con.commit()
@@ -132,7 +132,7 @@ def Labour_page(site_num=1):
                 print("Date of Birth:", new_dob)
                 print("Gender:", new_gender)
                 print("Languages Known:", new_languages_string)
-                print("Project Selection:", new_designation)
+                print("Designation Selection:", new_designation)
                 print("Address:", new_address)
                 
                 success_label.config(text="Data updation successful!", fg='green') 
@@ -146,9 +146,42 @@ def Labour_page(site_num=1):
         address_text.delete(1.0, tk.END)
         designation_menu.set('')
         dob_entry.set_date(datetime.date.today())
-        male_button.configure(value=False)
-        female_button.configure(value=False)
-        other_button.configure(value=False)
+        gender_var.set(False)
+        for lang in language_vars:
+            language_vars[lang].set(False)
+
+    def delete():
+        name = name_entry.get()
+        reg_no_to_delete = reg_no_entry.get()
+
+        if name and reg_no_to_delete:
+
+            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site=%s", (reg_no_to_delete,site_num))
+            existing_record = myc.fetchone()
+
+            if existing_record:
+                delete_query = "DELETE FROM users WHERE RegNo = %s AND Site=%s"
+                delete_data=(reg_no_to_delete,site_num)
+                
+                myc.execute(delete_query, delete_data)
+                con.commit()
+
+                try:
+                    myc.execute(delete_query, delete_data)
+                    con.commit()
+                except mysql.connector.Error as err:
+                    print("Error:", err)
+
+                print("Data deleted\n")
+                print("Registration Number:", reg_no_to_delete)
+                success_label.config(text="Data deletion successful!", fg='green')
+            else:
+                success_label.config(text="")
+                messagebox.showerror("Error", "Record with Registration Number {} not found!".format(reg_no_to_delete))
+        else:
+            success_label.config(text="")
+            messagebox.showerror("Error", "Name and Registration number required!")
+
 
     # Colors
     dark_bg='#232323'
@@ -232,7 +265,7 @@ def Labour_page(site_num=1):
     address_text = tk.Text(root, height=5, width=50, wrap=tk.WORD,font=('Arial', 12))
 
     # Designation Selection
-    options = ["Student", "Faculty", "Scholar", "HOD", "Dean"]
+    options = ["Asst. Manager", "Supervisor", "Senior Developer", "Junior Developer","Trainee"]
 
     designation_var = tk.StringVar()
     designation_menu=ttk.Combobox(root, textvariable=designation_var, values=options, style='TCombobox')
@@ -240,7 +273,7 @@ def Labour_page(site_num=1):
     # Buttons
     insert_button = ttk.Button(root, text="Submit", command=submit)
     update_button = ttk.Button(root, text="Update", command=update)
-    delete_button = ttk.Button(root, text="Delete")
+    delete_button = ttk.Button(root, text="Delete", command=delete)
     view_button = ttk.Button(root, text="Clear", command=clear)
     insert_button.configure(style='TButton')  # Apply the style to the button
     update_button.configure(style='TButton')  
