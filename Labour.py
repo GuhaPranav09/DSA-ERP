@@ -10,10 +10,6 @@ def Labour_page(site_num=1):
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
     myc = con.cursor()
-    myc.execute("show databases")
-    out1 = myc.fetchall()
-    if ("user_info",) not in out1:
-        myc.execute("create database user_info")
 
     myc.execute("use user_info")
     myc.execute("create table if not exists users(Site int, Name varchar(30), RegNo varchar(15), DOB date, Gender varchar(10), Languages varchar(255), Address varchar(255), Designation varchar(15))")
@@ -192,11 +188,6 @@ def Labour_page(site_num=1):
     root.title("Site {} Labour details".format(site_num))
     root.configure(bg=dark_bg)  # Dark background color
 
-    # Load your image using the Image class from Pillow
-    icon_image = Image.open("icon.png")
-    icon_photo = ImageTk.PhotoImage(icon_image)
-    root.iconphoto(True, icon_photo)
-
     #Image
     user_image = Image.open("user.png")
     user_photo = ImageTk.PhotoImage(user_image)
@@ -316,4 +307,5 @@ def Labour_page(site_num=1):
     # Run the Tkinter main loop
     root.mainloop()
 
-Labour_page()
+if __name__ == '__main__':
+    Labour_page()
