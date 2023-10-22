@@ -5,6 +5,12 @@ import mysql.connector
 from PIL import Image, ImageTk
 import Labour
 
+con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
+myc = con.cursor()
+myc.execute("use user_info")
+myc.execute("create table if not exists login(Site int, username varchar (50), password varchar (50))")
+
+
 def Manager_login_page():
     
 

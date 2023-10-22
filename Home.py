@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, Label
 from PIL import Image, ImageTk
-import Login
+
 import mysql.connector
 
 #SQL STARTUP STUFF
@@ -11,7 +11,7 @@ myc.execute("show databases")
 out1 = myc.fetchall()
 if ("user_info",) not in out1:
       myc.execute("create database user_info")
-
+import Login
 
 def Home_page():
     def open_manager_page():

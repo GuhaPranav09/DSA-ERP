@@ -5,14 +5,14 @@ def Labour_page(site_num=1):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-
+    import Local_Expenditure
 
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
     myc = con.cursor()
 
     myc.execute("use user_info")
-    myc.execute("create table if not exists users(Site int, Name varchar(30), RegNo varchar(15), DOB date, Gender varchar(10), Languages varchar(255), Address varchar(255), Designation varchar(15))")
+    myc.execute("create table if not exists labour(Site int, Name varchar(30), RegNo varchar(15), DOB date, Gender varchar(10), Languages varchar(255), Address varchar(255), Designation varchar(15))")
     con.commit()
 
     # Function to validate the form before submission
@@ -37,8 +37,8 @@ def Labour_page(site_num=1):
             messagebox.showerror("Error", "Atleast one language is required!")
             return False
         else:
-            # All fields are filled, proceed with form submission   
-            return True  # Call the submit function
+            # All fields are filled, proceed
+            return True  
         
 
     # Function to handle button click event
@@ -46,7 +46,7 @@ def Labour_page(site_num=1):
         if validate_form():
             
             reg_no_to_insert = reg_no_entry.get()
-            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site = %s", (reg_no_to_insert,site_num))
+            myc.execute("SELECT * FROM labour WHERE RegNo = %s AND Site = %s", (reg_no_to_insert,site_num))
             existing_record = myc.fetchone()
             
             if not existing_record:
@@ -63,7 +63,7 @@ def Labour_page(site_num=1):
                 languages_string = ", ".join(languages_list)
 
                 # SQL insertion query
-                insert_query = "insert into users (Site, Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s, %s)"
+                insert_query = "insert into labour (Site, Name, RegNo, DOB, Gender, Languages, Address, Designation) values (%s, %s, %s, %s, %s, %s, %s, %s)"
                 data = (site_num, name, reg_no, dob, gender, languages_string, address, designation)
 
                 try:
@@ -80,7 +80,7 @@ def Labour_page(site_num=1):
                 print("Languages Known:", languages_string)
                 print("Designation Selection:", designation)
                 print("Address:", address)
-                print("\n")
+                print("\n\n\n")
                 success_label.config(text="Data entry successful!", fg='green') 
             else:
                 success_label.config(text="")
@@ -91,7 +91,7 @@ def Labour_page(site_num=1):
             # Get registration number from user input
             reg_no_to_update = reg_no_entry.get()
             # Check if the registration number exists in the database
-            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site=%s", (reg_no_to_update,site_num))
+            myc.execute("SELECT * FROM labour WHERE RegNo = %s AND Site=%s", (reg_no_to_update,site_num))
             existing_record = myc.fetchone()
 
             if existing_record:
@@ -109,7 +109,7 @@ def Labour_page(site_num=1):
                 new_languages_string = ", ".join(new_languages_list)
 
                 # Update the record in the database
-                update_query = "UPDATE users SET Name = %s, DOB = %s, Gender = %s, Languages = %s, Address = %s, Designation = %s WHERE RegNo = %s AND Site=%s"
+                update_query = "UPDATE labour SET Name = %s, DOB = %s, Gender = %s, Languages = %s, Address = %s, Designation = %s WHERE RegNo = %s AND Site=%s"
                 update_data = (new_name, new_dob, new_gender, new_languages_string, new_address, new_designation, reg_no_to_update, site_num)
                 
                 myc.execute(update_query, update_data)
@@ -130,7 +130,7 @@ def Labour_page(site_num=1):
                 print("Languages Known:", new_languages_string)
                 print("Designation Selection:", new_designation)
                 print("Address:", new_address)
-                
+                print("\n\n\n")
                 success_label.config(text="Data updation successful!", fg='green') 
             else:
                 success_label.config(text="")
@@ -152,11 +152,11 @@ def Labour_page(site_num=1):
 
         if name and reg_no_to_delete:
 
-            myc.execute("SELECT * FROM users WHERE RegNo = %s AND Site=%s", (reg_no_to_delete,site_num))
+            myc.execute("SELECT * FROM labour WHERE RegNo = %s AND Site=%s", (reg_no_to_delete,site_num))
             existing_record = myc.fetchone()
 
             if existing_record:
-                delete_query = "DELETE FROM users WHERE RegNo = %s AND Site=%s"
+                delete_query = "DELETE FROM labour WHERE RegNo = %s AND Site=%s"
                 delete_data=(reg_no_to_delete,site_num)
                 
                 myc.execute(delete_query, delete_data)
@@ -170,6 +170,8 @@ def Labour_page(site_num=1):
 
                 print("Data deleted\n")
                 print("Registration Number:", reg_no_to_delete)
+                print("\n\n\n")
+
                 success_label.config(text="Data deletion successful!", fg='green')
             else:
                 success_label.config(text="")
@@ -178,6 +180,9 @@ def Labour_page(site_num=1):
             success_label.config(text="")
             messagebox.showerror("Error", "Name and Registration number required!")
 
+    def local_exp():
+        root.destroy()
+        Local_Expenditure.Local_Expenditure_page(site_num)
 
     # Colors
     dark_bg='#232323'
@@ -200,13 +205,15 @@ def Labour_page(site_num=1):
 
     # Company Name Label
     company_name_label = Label(root, text="Company Name", bg=dark_bg, fg='white', font=('Arial', 20, 'bold'))
+    page_name_label=Label(root, text="Labour", bg=dark_bg, fg='white', font=('Arial', 16, 'bold'))
 
     # Set Dark Theme Colors
     style = ttk.Style()
     style.configure('TButton', background=dark_bg, foreground=dark_bg, highlightBackground='#404040', highlightColor='#404040',font=('Arial', 10, 'bold'))
     style.configure('TRadiobutton', background=dark_bg, foreground=dark_fg, selectcolor=dark_bg)
     style.configure('TCheckbutton', background=dark_bg, foreground=dark_fg, selectcolor=dark_bg)  
-    style.configure('TCombobox', background=dark_bg, selectcolor=dark_bg, highlightthickness=0,selectfontcolor=dark_bg)  
+    style.configure('TCombobox', background=dark_bg, selectcolor=dark_bg, highlightthickness=0,selectfontcolor=dark_bg) 
+ 
 
 
     # Labels
@@ -265,43 +272,68 @@ def Labour_page(site_num=1):
     insert_button = ttk.Button(root, text="Submit", command=submit)
     update_button = ttk.Button(root, text="Update", command=update)
     delete_button = ttk.Button(root, text="Delete", command=delete)
-    view_button = ttk.Button(root, text="Clear", command=clear)
+    clear_button = ttk.Button(root, text="Clear", command=clear)
     insert_button.configure(style='TButton')  # Apply the style to the button
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
-    view_button.configure(style='TButton')  
+    clear_button.configure(style='TButton')  
 
     # Grid Configuration
-    for i in range(10):
+    for i in range(12):
         root.grid_rowconfigure(i, weight=1)
 
     # Grid Placement
-    company_name_label.grid(row=0, column=2, columnspan=2, sticky="n", pady=5)  
-    company_logo_label.grid(row=1, column=2, columnspan=2, sticky="n", pady=2) 
+    company_name_label.grid(row=1, column=2, columnspan=2, sticky="n", pady=5)  
+    page_name_label.grid(row=2, column=2, columnspan=2, sticky="n", pady=5)
+    company_logo_label.grid(row=3, column=2, columnspan=2, sticky="n", pady=2) 
 
-    image_label.grid(row=2, column=4, columnspan=3, rowspan=3, sticky="w")  
-    name_label.grid(row=2, column=0, sticky="w", padx=5, pady=5)
-    name_entry.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    reg_no_label.grid(row=3, column=0, sticky="w", padx=5, pady=5)
-    reg_no_entry.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    dob_label.grid(row=4, column=0, sticky="w", padx=5, pady=5)
-    dob_entry.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    gender_label.grid(row=5, column=0, sticky="w", padx=5, pady=5)
-    male_button.grid(row=5, column=1, padx=5, pady=5, sticky="w")
-    female_button.grid(row=5, column=2, padx=5, pady=5, sticky="w")
-    other_button.grid(row=5, column=3, padx=5, pady=5, sticky="w")
-    languages_label.grid(row=6, column=0, sticky="w", padx=5, pady=5)
+    image_label.grid(row=4, column=4, columnspan=3, rowspan=3, sticky="w")  
+    name_label.grid(row=4, column=0, sticky="w", padx=5, pady=5)
+    name_entry.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    reg_no_label.grid(row=5, column=0, sticky="w", padx=5, pady=5)
+    reg_no_entry.grid(row=5, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    dob_label.grid(row=6, column=0, sticky="w", padx=5, pady=5)
+    dob_entry.grid(row=6, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    gender_label.grid(row=7, column=0, sticky="w", padx=5, pady=5)
+    male_button.grid(row=7, column=1, padx=5, pady=5, sticky="w")
+    female_button.grid(row=7, column=2, padx=5, pady=5, sticky="w")
+    other_button.grid(row=7, column=3, padx=5, pady=5, sticky="w")
+    languages_label.grid(row=8, column=0, sticky="w", padx=5, pady=5)
     for i in range(len(languages)):
-        language_checkboxes[i].grid(row=6, column=i+1, padx=5, pady=5, sticky="w")
-    address_label.grid(row=7, column=0, sticky="w", padx=5, pady=5)
-    address_text.grid(row=7, column=1, columnspan=4, padx=5, pady=5, sticky="w")
-    designation_label.grid(row=8, column=0, sticky="w", padx=5, pady=5)
-    designation_menu.grid(row=8, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    insert_button.grid(row=9, column=1, pady=10)
-    update_button.grid(row=9, column=2, pady=10)
-    delete_button.grid(row=9, column=3, pady=10)
-    view_button.grid(row=9, column=4, pady=10)
-    success_label.grid(row=10, column=1, columnspan=4, pady=10)
+        language_checkboxes[i].grid(row=8, column=i+1, padx=5, pady=5, sticky="w")
+    address_label.grid(row=9, column=0, sticky="w", padx=5, pady=5)
+    address_text.grid(row=9, column=1, columnspan=4, padx=5, pady=5, sticky="w")
+    designation_label.grid(row=10, column=0, sticky="w", padx=5, pady=5)
+    designation_menu.grid(row=10, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    insert_button.grid(row=11, column=1, pady=10)
+    update_button.grid(row=11, column=2, pady=10)
+    delete_button.grid(row=11, column=3, pady=10)
+    clear_button.grid(row=11, column=4, pady=10)
+    success_label.grid(row=12, column=1, columnspan=4, pady=10)
+
+    # Navigation bar frame
+    nav_bar_frame2 = tk.Frame(root, bg="#777777")
+    nav_bar_frame2.grid(row=0, column=0, columnspan=8, sticky="news")
+    nav_bar_frame = tk.Frame(root, bg="#777777")
+    nav_bar_frame.grid(row=0, column=1, columnspan=7, sticky="news")
+
+    
+
+    # Buttons in the navigation bar
+    home_button = ttk.Button(nav_bar_frame, text="Local Expenditure", command=local_exp)
+    manager_button = ttk.Button(nav_bar_frame, text="Material Purchase" )
+    director_button = ttk.Button(nav_bar_frame, text="Labour" )
+    exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary")
+    home_button.configure(style='TButton')  # Apply the style to the button
+    manager_button.configure(style='TButton')  
+    director_button.configure(style='TButton')  
+    exit_button.configure(style='TButton')
+
+    # Grid placement for navigation bar buttonexit
+    home_button.grid(row=0, column=1, padx=10, pady=10)
+    manager_button.grid(row=0, column=2, padx=10, pady=10)
+    director_button.grid(row=0, column=3, padx=10, pady=10)
+    exit_button.grid(row=0, column=4, padx=[10,150], pady=10)
 
 
     # Run the Tkinter main loop
