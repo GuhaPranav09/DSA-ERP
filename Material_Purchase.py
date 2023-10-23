@@ -1,11 +1,11 @@
-def Local_Expenditure_page(site_num=1):
+def Material_Purchase_page(site_num=1):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Labour, Material_Purchase
+    import Labour, Local_Expenditure
    
 
     #SQL STARTUP STUFF
@@ -13,17 +13,18 @@ def Local_Expenditure_page(site_num=1):
     myc = con.cursor()
 
     myc.execute("use user_info")
-    myc.execute("create table if not exists expenditure(Site int, Amount int, Activity TEXT, DOB date)")
+    myc.execute("create table if not exists purchase(Site int, Material int, Quantity int, Price int, DOB date)")
     con.commit()
 
     # Function to validate the form before submission
     def validate_form():
-        amount = amount_entry.get()
-        activity = activity_entry.get()
+        material=material_entry.get()
+        quantity=quantity_entry.get()
+        price=price_entry.get()
         dob = dob_entry.get_date()
 
         # Check if all required fields are filled
-        if not (amount and dob and activity):
+        if not (material and dob and quantity and price):
             # If any required field is empty, show an error message
             success_label.config(text="")
             messagebox.showerror("Error", "All fields are required!")
@@ -35,18 +36,19 @@ def Local_Expenditure_page(site_num=1):
     # Function to handle button click event
     def submit():
         if validate_form():
-            amount = amount_entry.get()
-            activity = activity_entry.get()
+            material=material_entry.get()
+            quantity=quantity_entry.get()
+            price=price_entry.get()
             dob = dob_entry.get_date().strftime("%Y%m%d")
 
-            myc.execute("SELECT * FROM expenditure WHERE DOB = %s AND Activity=%s AND Site=%s", (dob, activity, site_num))
+            myc.execute("SELECT * FROM expenditure WHERE DOB = %s AND Material=%s AND Site=%s", (dob, material, site_num))
             existing_record = myc.fetchone()
             
             if not existing_record:
 
                 # SQL insertion query
-                insert_query = "insert into expenditure (Site, DOB, Activity, Amount) values (%s, %s, %s, %s)"
-                data = (site_num,dob,activity, amount)
+                insert_query = "insert into expenditure (Site, DOB, Material, Quantity, Price) values (%s, %s, %s, %s, %s)"
+                data = (site_num,dob,material,quantity,price)
 
                 try:
                     myc.execute(insert_query, data)
@@ -56,8 +58,9 @@ def Local_Expenditure_page(site_num=1):
 
                 print("Site no.:", site_num)
                 print("Time Stamp:", dob)
-                print("Activity:", activity)
-                print("Amount:", amount)
+                print("Material:", material)
+                print("Quantity:", quantity)
+                print("Price:", price)
                 print("\n\n\n")
                 success_label.config(text="Data entry successful!", fg='green') 
             else:
@@ -71,23 +74,26 @@ def Local_Expenditure_page(site_num=1):
            pass
                 
     def clear():
-        amount_entry.delete(0, tk.END)      
-        activity_entry.delete(0, tk.END)
+        material_entry.delete(0, tk.END)      
+        quantity_entry.delete(0, tk.END)
+        price_entry.delete(0, tk.END)
         dob_entry.set_date(datetime.date.today())
 
     def delete():
-        activity = activity_entry.get()
+        material=material_entry.get()
+        quantity=quantity_entry.get()
+        price=price_entry.get()
         dob = dob_entry.get_date().strftime("%Y%m%d")
 
         # Check if all required fields are filled
-        if dob and activity:
+        if dob and material:
 
-            myc.execute("SELECT * FROM expenditure WHERE DOB = %s AND Activity=%s AND Site=%s", (dob, activity, site_num))
+            myc.execute("SELECT * FROM material WHERE DOB = %s AND Material=%s AND Site=%s", (dob, material, site_num))
             existing_record = myc.fetchone()
 
             if existing_record:
-                delete_query = "DELETE FROM expenditure WHERE DOB = %s AND Activity=%s AND Site=%s"
-                delete_data=(dob,activity,site_num)
+                delete_query = "DELETE FROM expenditure WHERE DOB = %s AND Material=%s AND Site=%s"
+                delete_data=(dob,material,site_num)
                 
                 myc.execute(delete_query, delete_data)
                 con.commit()
@@ -101,20 +107,20 @@ def Local_Expenditure_page(site_num=1):
                 print("Data deleted\n")
                 print("Site no.:", site_num)
                 print("Time Stamp:", dob)
-                print("Activity:", activity)
+                print("Material:", material)
                 print("\n\n\n")
                 success_label.config(text="Data deletion successful!", fg='green')
         else:
             success_label.config(text="")
-            messagebox.showerror("Error", "Time Stamp and Activity required!")
+            messagebox.showerror("Error", "Time Stamp and Material required!")
 
     def labour():
         root.destroy()
         Labour.Labour_page(site_num)
 
-    def material():
+    def local_exp():
         root.destroy()
-        Material_Purchase.Material_Purchase_page(site_num)
+        Local_Expenditure.Local_Expenditure_page(site_num)
 
     # Colors
     dark_bg='#232323'
@@ -122,7 +128,7 @@ def Local_Expenditure_page(site_num=1):
 
     # Create main window
     root = tk.Tk()
-    root.title("Site {} Local Expenditure details".format(site_num))
+    root.title("Site {} Material Purchase details".format(site_num))
     root.configure(bg=dark_bg)  # Dark background color
 
     # Load your company logo
@@ -140,17 +146,19 @@ def Local_Expenditure_page(site_num=1):
     style.configure('TCombobox', background=dark_bg, selectcolor=dark_bg, highlightthickness=0,selectfontcolor=dark_bg) 
 
     # Labels
-    activity_label = tk.Label(root, text="Activity:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
-    amount_label = tk.Label(root, text="Amount:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
+    material_label = tk.Label(root, text="Material:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
+    quantity_label = tk.Label(root, text="Quantity:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
+    price_label = tk.Label(root, text="Price:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
     dob_label = tk.Label(root, text="Timestamp:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
 
     # Error Label for displaying validation messages
     success_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))
 
     # Entry Fields
-    activity_entry = tk.Entry(root, font=('Arial',12))
-    amount_entry = tk.Entry(root, font=('Arial',12))
-
+    material_entry = tk.Entry(root, font=('Arial',12))
+    quantity_entry = tk.Entry(root, font=('Arial',12))
+    price_entry = tk.Entry(root, font=('Arial',12))
+    
     # Function to handle entry field focus out event
     def on_focus_out(event):
         if dob_entry.get() == "":
@@ -174,7 +182,7 @@ def Local_Expenditure_page(site_num=1):
     clear_button.configure(style='TButton')  
 
     # Grid Configuration
-    for i in range(8):
+    for i in range(9):
         root.grid_rowconfigure(i, weight=1)
 
     # Grid Placement
@@ -184,17 +192,19 @@ def Local_Expenditure_page(site_num=1):
 
     dob_label.grid(row=4, column=0, sticky="w", padx=5, pady=5)
     dob_entry.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    activity_label.grid(row=5, column=0, sticky="w", padx=5, pady=5)
-    activity_entry.grid(row=5, column=1, columnspan=3, padx=5, pady=5, sticky="w")
-    amount_label.grid(row=6, column=0, sticky="w", padx=5, pady=5)
-    amount_entry.grid(row=6, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    material_label.grid(row=5, column=0, sticky="w", padx=5, pady=5)
+    material_entry.grid(row=5, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    quantity_label.grid(row=6, column=0, sticky="w", padx=5, pady=5)
+    quantity_entry.grid(row=6, column=1, columnspan=3, padx=5, pady=5, sticky="w")
+    price_label.grid(row=7, column=0, sticky="w", padx=5, pady=5)
+    price_entry.grid(row=7, column=1, columnspan=3, padx=5, pady=5, sticky="w")
     
    
-    insert_button.grid(row=7, column=1, pady=10)
-    update_button.grid(row=7, column=2, pady=10)
-    delete_button.grid(row=7, column=3, pady=10)
-    clear_button.grid(row=7, column=4, pady=10)
-    success_label.grid(row=8, column=1, columnspan=4, pady=10)
+    insert_button.grid(row=8, column=1, pady=10)
+    update_button.grid(row=8, column=2, pady=10)
+    delete_button.grid(row=8, column=3, pady=10)
+    clear_button.grid(row=8, column=4, pady=10)
+    success_label.grid(row=9, column=1, columnspan=4, pady=10)
 
     # Navigation bar frame
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
@@ -205,8 +215,8 @@ def Local_Expenditure_page(site_num=1):
     
 
     # Buttons in the navigation bar
-    home_button = ttk.Button(nav_bar_frame, text="Local Expenditure")
-    manager_button = ttk.Button(nav_bar_frame, text="Material Purchase", command=material)
+    home_button = ttk.Button(nav_bar_frame, text="Local Expenditure", command=local_exp)
+    manager_button = ttk.Button(nav_bar_frame, text="Material Purchase",)
     director_button = ttk.Button(nav_bar_frame, text="Labour", command=labour)
     exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary")
     home_button.configure(style='TButton')  # Apply the style to the button
@@ -225,4 +235,4 @@ def Local_Expenditure_page(site_num=1):
     root.mainloop()
 
 if __name__ == '__main__':
-    Local_Expenditure_page()
+    Material_Purchase_page()

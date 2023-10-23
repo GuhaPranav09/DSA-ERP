@@ -5,7 +5,7 @@ def Labour_page(site_num=1):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Local_Expenditure
+    import Local_Expenditure, Material_Purchase
 
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
@@ -184,6 +184,10 @@ def Labour_page(site_num=1):
         root.destroy()
         Local_Expenditure.Local_Expenditure_page(site_num)
 
+    def material():
+        root.destroy()
+        Material_Purchase.Material_Purchase_page(site_num)
+
     # Colors
     dark_bg='#232323'
     dark_fg='white'
@@ -321,7 +325,7 @@ def Labour_page(site_num=1):
 
     # Buttons in the navigation bar
     home_button = ttk.Button(nav_bar_frame, text="Local Expenditure", command=local_exp)
-    manager_button = ttk.Button(nav_bar_frame, text="Material Purchase" )
+    manager_button = ttk.Button(nav_bar_frame, text="Material Purchase", command=material)
     director_button = ttk.Button(nav_bar_frame, text="Labour" )
     exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary")
     home_button.configure(style='TButton')  # Apply the style to the button
