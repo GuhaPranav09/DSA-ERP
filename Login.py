@@ -57,10 +57,10 @@ def Manager_login_page():
     login_window.configure(bg=dark_bg)  # Dark background color
     login_window.geometry("400x350")  # Set window size
 
-    # Load your image using the Image class from Pillow
+    ''' Load your image using the Image class from Pillow
     icon_image = Image.open("icon.png")
     icon_photo = ImageTk.PhotoImage(icon_image)
-    login_window.iconphoto(True, icon_photo)
+    login_window.iconphoto(True, icon_photo)'''
 
     # Set Dark Theme Colors
     style = ttk.Style()
@@ -129,13 +129,14 @@ def Director_login_page():
         password = password_entry.get()
 
         # Check if the login details match the records in the database
-        myc.execute("SELECT * FROM login WHERE username=%s AND password=%s", (username, password))
+        myc.execute("SELECT * FROM login WHERE Site=%s AND username=%s AND password=%s", (0,username, password))
         result = myc.fetchone()
 
         # If login details match, close the login window and open the user information window
         if username and password:
             if result:
-                #login_window.destroy()  # Close the login window
+                login_window.destroy()  # Close the login window
+                Labour.D_Labour_page()
                 pass
             else:
                 messagebox.showerror("Error", "Invalid login credentials. Please try again.")
@@ -153,10 +154,10 @@ def Director_login_page():
     login_window.configure(bg=dark_bg)  # Dark background color
     login_window.geometry("400x300")  # Set window size
 
-    # Load your image using the Image class from Pillow
+    ''' Load your image using the Image class from Pillow
     icon_image = Image.open("icon.png")
     icon_photo = ImageTk.PhotoImage(icon_image)
-    login_window.iconphoto(True, icon_photo)
+    login_window.iconphoto(True, icon_photo)'''
 
     # Set Dark Theme Colors
     style = ttk.Style()
