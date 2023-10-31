@@ -203,12 +203,12 @@ def Labour_page(pwd, site_num=1):
     root.configure(bg=dark_bg)  # Dark background color
 
     #Image
-    user_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\user.png")
+    user_image = Image.open("user.png")
     user_photo = ImageTk.PhotoImage(user_image)
     image_label = Label(root, image=user_photo, background=dark_bg)
 
     # Load your company logo
-    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
+    company_logo_image = Image.open("company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 
@@ -557,12 +557,12 @@ def D_Labour_page(pwd):
     root.configure(bg=dark_bg)  # Dark background color
 
     #Image
-    user_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\user.png")
+    user_image = Image.open("user.png")
     user_photo = ImageTk.PhotoImage(user_image)
     image_label = Label(root, image=user_photo, background=dark_bg)
 
     # Load your company logo
-    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
+    company_logo_image = Image.open("company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 

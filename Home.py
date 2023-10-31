@@ -37,7 +37,7 @@ def Home_page():
     root.geometry("400x300")
 
     # Load your company logo
-    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150, 150))
+    company_logo_image = Image.open("company_logo.png").resize((150, 150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 
