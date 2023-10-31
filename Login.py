@@ -5,16 +5,12 @@ import mysql.connector
 from PIL import Image, ImageTk
 import Labour
 
-con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
-myc = con.cursor()
-myc.execute("use user_info")
-myc.execute("create table if not exists login(Site int, username varchar (50), password varchar (50))")
 
 
-def Manager_login_page():
+def Manager_login_page(pwd):
     
 
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql', database='user_info')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd, database='user_info')
     myc = con.cursor()
 
     def back():
@@ -24,7 +20,7 @@ def Manager_login_page():
     # Function to handle login button click event
     def login():
         # Connect to the MySQL database
-        con = mysql.connector.connect(host='localhost', user='root', passwd='mysql', database='user_info')
+        con = mysql.connector.connect(host='localhost', user='root', passwd=pwd, database='user_info')
         myc = con.cursor()
 
         # Retrieve username and password from the entry fields
@@ -40,7 +36,7 @@ def Manager_login_page():
         if site_num and username and password:
             if result:
                 login_window.destroy()  # Close the login window
-                Labour.Labour_page(site_num)  # Open the user information window
+                Labour.Labour_page(pwd, site_num)  # Open the user information window
             else:
                 messagebox.showerror("Error", "Invalid login credentials. Please try again.")
         else:
@@ -109,9 +105,9 @@ def Manager_login_page():
     # Run the Tkinter main loop for login window
     login_window.mainloop()
 
-def Director_login_page():
+def Director_login_page(pwd):
 
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql', database='user_info')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd, database='user_info')
     myc = con.cursor()
 
     def back():
@@ -121,7 +117,7 @@ def Director_login_page():
     # Function to handle login button click event
     def login():
         # Connect to the MySQL database
-        con = mysql.connector.connect(host='localhost', user='root', passwd='mysql', database='user_info')
+        con = mysql.connector.connect(host='localhost', user='root', passwd=pwd, database='user_info')
         myc = con.cursor()
 
         # Retrieve username and password from the entry fields
@@ -136,7 +132,7 @@ def Director_login_page():
         if username and password:
             if result:
                 login_window.destroy()  # Close the login window
-                Labour.D_Labour_page()
+                Labour.D_Labour_page(pwd)
                 pass
             else:
                 messagebox.showerror("Error", "Invalid login credentials. Please try again.")

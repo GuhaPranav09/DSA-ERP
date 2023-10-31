@@ -1,26 +1,30 @@
-import tkinter as tk
-from tkinter import ttk, Label
-from PIL import Image, ImageTk
-
-import mysql.connector
-
-#SQL STARTUP STUFF
-con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
-myc = con.cursor()
-myc.execute("show databases")
-out1 = myc.fetchall()
-if ("user_info",) not in out1:
-      myc.execute("create database user_info")
-import Login
-
 def Home_page():
+    
+    import tkinter as tk
+    from tkinter import ttk, Label
+    from PIL import Image, ImageTk
+
+    import mysql.connector
+    pwd = input()
+    #SQL STARTUP STUFF
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
+    myc = con.cursor()
+    myc.execute("show databases")
+    out1 = myc.fetchall()
+    if ("user_info",) not in out1:
+        myc.execute("create database user_info")
+
+    myc.execute("use user_info")
+    myc.execute("create table if not exists login(Site int, username varchar (50), password varchar (50))")
+
+    import Login
     def open_manager_page():
         root.destroy()
-        Login.Manager_login_page()
+        Login.Manager_login_page(pwd)
 
     def open_director_page():
         root.destroy()
-        Login.Director_login_page()
+        Login.Director_login_page(pwd)
 
     # Colors
     dark_bg = '#232323'
@@ -33,7 +37,7 @@ def Home_page():
     root.geometry("400x300")
 
     # Load your company logo
-    company_logo_image = Image.open("company_logo.png").resize((150, 150), Image.ANTIALIAS)
+    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150, 150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 

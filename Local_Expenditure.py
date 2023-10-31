@@ -1,4 +1,4 @@
-def Local_Expenditure_page(site_num=1):
+def Local_Expenditure_page(pwd, site_num=1):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -9,7 +9,7 @@ def Local_Expenditure_page(site_num=1):
    
 
     #SQL STARTUP STUFF
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
     myc = con.cursor()
 
     myc.execute("use user_info")
@@ -113,15 +113,15 @@ def Local_Expenditure_page(site_num=1):
 
     def labour():
         root.destroy()
-        Labour.Labour_page(site_num)
+        Labour.Labour_page(pwd, site_num)
 
     def material():
         root.destroy()
-        Material_Purchase.Material_Purchase_page(site_num)
+        Material_Purchase.Material_Purchase_page(pwd, site_num)
 
     def salary():
         root.destroy()
-        Staff_Salary.Staff_Salary_page(site_num)
+        Staff_Salary.Staff_Salary_page(pwd, site_num)
 
     # Colors
     dark_bg='#232323'
@@ -133,7 +133,7 @@ def Local_Expenditure_page(site_num=1):
     root.configure(bg=dark_bg)  # Dark background color
 
     # Load your company logo
-    company_logo_image = Image.open("company_logo.png").resize((150,150), Image.ANTIALIAS)
+    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 
@@ -231,7 +231,7 @@ def Local_Expenditure_page(site_num=1):
     # Run the Tkinter main loop
     root.mainloop()
 
-def D_Local_Expenditure_page():
+def D_Local_Expenditure_page(pwd):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -242,7 +242,7 @@ def D_Local_Expenditure_page():
    
 
     #SQL STARTUP STUFF
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
     myc = con.cursor()
 
     myc.execute("use user_info")
@@ -350,15 +350,15 @@ def D_Local_Expenditure_page():
 
     def labour():
         root.destroy()
-        Labour.D_Labour_page()
+        Labour.D_Labour_page(pwd)
 
     def material():
         root.destroy()
-        Material_Purchase.D_Material_Purchase_page()
+        Material_Purchase.D_Material_Purchase_page(pwd)
 
     def salary():
         root.destroy()
-        Staff_Salary.D_Staff_Salary_page()
+        Staff_Salary.D_Staff_Salary_page(pwd)
 
     # Colors
     dark_bg='#232323'
@@ -370,7 +370,7 @@ def D_Local_Expenditure_page():
     root.configure(bg=dark_bg)  # Dark background color
 
     # Load your company logo
-    company_logo_image = Image.open("company_logo.png").resize((150,150), Image.ANTIALIAS)
+    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 

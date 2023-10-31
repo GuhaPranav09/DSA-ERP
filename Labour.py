@@ -1,4 +1,4 @@
-def Labour_page(site_num=1):
+def Labour_page(pwd, site_num=1):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -8,7 +8,7 @@ def Labour_page(site_num=1):
     import Local_Expenditure, Material_Purchase, Staff_Salary
 
     #SQL STARTUP STUFF
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
     myc = con.cursor()
 
     myc.execute("use user_info")
@@ -183,15 +183,15 @@ def Labour_page(site_num=1):
 
     def local_exp():
         root.destroy()
-        Local_Expenditure.Local_Expenditure_page(site_num)
+        Local_Expenditure.Local_Expenditure_page(pwd,site_num)
 
     def material():
         root.destroy()
-        Material_Purchase.Material_Purchase_page(site_num)
+        Material_Purchase.Material_Purchase_page(pwd,site_num)
     
     def salary():
         root.destroy()
-        Staff_Salary.Staff_Salary_page(site_num)
+        Staff_Salary.Staff_Salary_page(pwd,site_num)
 
     # Colors
     dark_bg='#232323'
@@ -203,12 +203,12 @@ def Labour_page(site_num=1):
     root.configure(bg=dark_bg)  # Dark background color
 
     #Image
-    user_image = Image.open("user.png")
+    user_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\user.png")
     user_photo = ImageTk.PhotoImage(user_image)
     image_label = Label(root, image=user_photo, background=dark_bg)
 
     # Load your company logo
-    company_logo_image = Image.open("company_logo.png").resize((150,150), Image.ANTIALIAS)
+    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 
@@ -348,7 +348,7 @@ def Labour_page(site_num=1):
     # Run the Tkinter main loop
     root.mainloop()
 
-def D_Labour_page():
+def D_Labour_page(pwd):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
@@ -358,7 +358,7 @@ def D_Labour_page():
     import Local_Expenditure, Material_Purchase, Staff_Salary
 
     #SQL STARTUP STUFF
-    con = mysql.connector.connect(host='localhost', user='root', passwd='mysql')
+    con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
     myc = con.cursor()
 
     myc.execute("use user_info")
@@ -537,15 +537,15 @@ def D_Labour_page():
 
     def local_exp():
         root.destroy()
-        Local_Expenditure.D_Local_Expenditure_page()
+        Local_Expenditure.D_Local_Expenditure_page(pwd)
 
     def material():
         root.destroy()
-        Material_Purchase.D_Material_Purchase_page()
+        Material_Purchase.D_Material_Purchase_page(pwd)
     
     def salary():
         root.destroy()
-        Staff_Salary.D_Staff_Salary_page()
+        Staff_Salary.D_Staff_Salary_page(pwd)
 
     # Colors
     dark_bg='#232323'
@@ -557,12 +557,12 @@ def D_Labour_page():
     root.configure(bg=dark_bg)  # Dark background color
 
     #Image
-    user_image = Image.open("user.png")
+    user_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\user.png")
     user_photo = ImageTk.PhotoImage(user_image)
     image_label = Label(root, image=user_photo, background=dark_bg)
 
     # Load your company logo
-    company_logo_image = Image.open("company_logo.png").resize((150,150), Image.ANTIALIAS)
+    company_logo_image = Image.open(r"S:\Extracurricular stuff\DSA Project\DSA-ERP\company_logo.png").resize((150,150))
     company_logo_photo = ImageTk.PhotoImage(company_logo_image)
     company_logo_label = Label(root, image=company_logo_photo, background=dark_bg)
 
@@ -707,4 +707,4 @@ def D_Labour_page():
 
 
 if __name__ == '__main__':
-    Labour_page()
+    Labour_page(pwd)
