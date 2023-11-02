@@ -1,11 +1,11 @@
-def Home_page():
+def Home_page(pwd):
     
     import tkinter as tk
     from tkinter import ttk, Label
     from PIL import Image, ImageTk
 
     import mysql.connector
-    pwd = input()
+    
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
     myc = con.cursor()
@@ -72,4 +72,5 @@ def Home_page():
     root.mainloop()
 
 if __name__ == '__main__':
-    Home_page()
+    pwd = input()
+    Home_page(pwd)

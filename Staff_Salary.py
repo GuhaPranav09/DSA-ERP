@@ -155,6 +155,7 @@ def Staff_Salary_page(pwd, site_num=1):
         root.destroy()
         Material_Purchase.Material_Purchase_page(pwd, site_num)
 
+
     # Colors
     dark_bg='#232323'
     dark_fg='white'
@@ -260,7 +261,7 @@ def D_Staff_Salary_page(pwd):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Labour, Local_Expenditure, Material_Purchase
+    import Labour, Local_Expenditure, Material_Purchase, Managers_password
    
 
     #SQL STARTUP STUFF
@@ -415,6 +416,10 @@ def D_Staff_Salary_page(pwd):
         root.destroy()
         Material_Purchase.D_Material_Purchase_page(pwd)
 
+    def managers():
+        root.destroy()
+        Managers_password.Password_Page(pwd)
+
     # Colors
     dark_bg='#232323'
     dark_fg='white'
@@ -493,23 +498,24 @@ def D_Staff_Salary_page(pwd):
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
     nav_bar_frame2.grid(row=0, column=0, columnspan=8, sticky="news")
     nav_bar_frame = tk.Frame(root, bg="#777777")
-    nav_bar_frame.grid(row=0, column=1, columnspan=7, sticky="news")
-
-    
+    nav_bar_frame.grid(row=0, column=0, columnspan=7, sticky="news")
 
     # Buttons in the navigation bar
     home_button = ttk.Button(nav_bar_frame, text="Local Expenditure", command=local_exp)
     manager_button = ttk.Button(nav_bar_frame, text="Material Purchase",command=material)
+    accounts_button = ttk.Button(nav_bar_frame, text="Managers", command=managers)
     director_button = ttk.Button(nav_bar_frame, text="Labour", command=labour)
     exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary")
     home_button.configure(style='TButton')  # Apply the style to the button
     manager_button.configure(style='TButton')  
+    accounts_button.configure(style='TButton')  
     director_button.configure(style='TButton')  
     exit_button.configure(style='TButton')
 
     # Grid placement for navigation bar buttonexit
-    home_button.grid(row=0, column=1, padx=10, pady=10)
-    manager_button.grid(row=0, column=2, padx=10, pady=10)
+    home_button.grid(row=0, column=0, padx=[100,10], pady=10)
+    manager_button.grid(row=0, column=1, padx=10, pady=10)
+    accounts_button.grid(row=0, column=2, padx=10, pady=10)
     director_button.grid(row=0, column=3, padx=10, pady=10)
     exit_button.grid(row=0, column=4, padx=[10,100], pady=10)
 
@@ -519,4 +525,4 @@ def D_Staff_Salary_page(pwd):
 
 
 if __name__ == '__main__':
-    Staff_Salary_page()
+    Staff_Salary_page("mysql")

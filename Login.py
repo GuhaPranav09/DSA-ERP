@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk, Label, messagebox
 import mysql.connector
 from PIL import Image, ImageTk
-import Labour
+import Manager_home, Director_home
 
 
 
@@ -15,7 +15,7 @@ def Manager_login_page(pwd):
 
     def back():
         login_window.destroy()
-        Home.Home_page()
+        Home.Home_page(pwd)
 
     # Function to handle login button click event
     def login():
@@ -36,7 +36,7 @@ def Manager_login_page(pwd):
         if site_num and username and password:
             if result:
                 login_window.destroy()  # Close the login window
-                Labour.Labour_page(pwd, site_num)  # Open the user information window
+                Manager_home.Manager_Home_Page(pwd, site_num,username)  # Open the user information window
             else:
                 messagebox.showerror("Error", "Invalid login credentials. Please try again.")
         else:
@@ -53,10 +53,6 @@ def Manager_login_page(pwd):
     login_window.configure(bg=dark_bg)  # Dark background color
     login_window.geometry("400x350")  # Set window size
 
-    ''' Load your image using the Image class from Pillow
-    icon_image = Image.open("icon.png")
-    icon_photo = ImageTk.PhotoImage(icon_image)
-    login_window.iconphoto(True, icon_photo)'''
 
     # Set Dark Theme Colors
     style = ttk.Style()
@@ -112,7 +108,7 @@ def Director_login_page(pwd):
 
     def back():
         login_window.destroy()
-        Home.Home_page()
+        Home.Home_page(pwd)
 
     # Function to handle login button click event
     def login():
@@ -132,7 +128,7 @@ def Director_login_page(pwd):
         if username and password:
             if result:
                 login_window.destroy()  # Close the login window
-                Labour.D_Labour_page(pwd)
+                Director_home.Director_Home_Page(pwd,username)
                 pass
             else:
                 messagebox.showerror("Error", "Invalid login credentials. Please try again.")
@@ -198,4 +194,4 @@ def Director_login_page(pwd):
     login_window.mainloop()
 
 if __name__ == '__main__':
-    Home.Home_page()
+    Home.Home_page("mysql")
