@@ -57,7 +57,7 @@ def Material_Purchase_page(pwd, site_num=1):
                     print("Error:", err)
 
                 print("Site no.:", site_num)
-                print("Time Stamp:", dob)
+                print("Date:", dob)
                 print("Material:", material)
                 print("Quantity:", quantity)
                 print("Price:Rs", price)
@@ -70,8 +70,44 @@ def Material_Purchase_page(pwd, site_num=1):
 
     def update():
         if validate_form():
+            dob = dob_entry.get_date().strftime("%Y%m%d")
+            material=material_entry.get()
+
+            myc.execute("SELECT * FROM salary WHERE DOB = %s AND Material=%s AND Site=%s", (dob,material,site_num))
+            existing_record = myc.fetchone()
+
+            if existing_record:
+                # Fetch new details from the user
+                dob = dob_entry.get_date().strftime("%Y%m%d")
+                material=material_entry.get()
+                price=price_entry.get()
+                quantity=quantity_entry.get()
+
+                # Update the record in the database
+                update_query = "UPDATE salary SET Price=%s, Quantity=%s WHERE Material = %s AND DOB=%s AND Site=%s"
+                update_data = (price,quantity, material, dob, site_num)
+                
+                myc.execute(update_query, update_data)
+                con.commit()
+
+                try:
+                    myc.execute(update_query, update_data)
+                    con.commit()
+                except mysql.connector.Error as err:
+                    print("Error:", err)
+
+                print("UPDATED DETAILS\n\n")
+                print("Site no.:", site_num)
+                print("Date:", dob)
+                print("Material:", material)
+                print("Quantity:", quantity)
+                print("Price:Rs", price)
+                print("\n\n\n")
+                success_label.config(text="Data updation successful!", fg='green') 
+            else:
+                success_label.config(text="")
+                messagebox.showerror("Error", "Record doesn't exist!")
            
-           pass
                 
     def clear():
         material_entry.delete(0, tk.END)      
@@ -104,7 +140,7 @@ def Material_Purchase_page(pwd, site_num=1):
 
                 print("Data deleted\n")
                 print("Site no.:", site_num)
-                print("Time Stamp:", dob)
+                print("Date:", dob)
                 print("Material:", material)
                 print("\n\n\n")
                 success_label.config(text="Data deletion successful!", fg='green')
@@ -113,7 +149,7 @@ def Material_Purchase_page(pwd, site_num=1):
                 messagebox.showerror("Error", "Record doesnt exist!")
         else:
             success_label.config(text="")
-            messagebox.showerror("Error", "Site no., Time Stamp and Material required!")
+            messagebox.showerror("Error", "Site no., Date and Material required!")
 
     def labour():
         root.destroy()
@@ -155,7 +191,7 @@ def Material_Purchase_page(pwd, site_num=1):
     material_label = tk.Label(root, text="Material:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
     quantity_label = tk.Label(root, text="Quantity:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
     price_label = tk.Label(root, text="Price:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
-    dob_label = tk.Label(root, text="Timestamp:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
+    dob_label = tk.Label(root, text="Date:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
 
     # Error Label for displaying validation messages
     success_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))
@@ -301,7 +337,7 @@ def D_Material_Purchase_page(pwd):
                     print("Error:", err)
 
                 print("Site no.:", site_num)
-                print("Time Stamp:", dob)
+                print("Date:", dob)
                 print("Material:", material)
                 print("Quantity:", quantity)
                 print("Price:Rs", price)
@@ -315,8 +351,45 @@ def D_Material_Purchase_page(pwd):
 
     def update():
         if validate_form():
+            site_num = site_entry.get()
+            dob = dob_entry.get_date().strftime("%Y%m%d")
+            material=material_entry.get()
+
+            myc.execute("SELECT * FROM purchase WHERE DOB = %s AND Material=%s AND Site=%s", (dob,material,site_num))
+            existing_record = myc.fetchone()
+
+            if existing_record:
+                # Fetch new details from the user
+                dob = dob_entry.get_date().strftime("%Y%m%d")
+                material=material_entry.get()
+                price=price_entry.get()
+                quantity=quantity_entry.get()
+
+                # Update the record in the database
+                update_query = "UPDATE purchase SET Price=%s, Quantity=%s WHERE Material = %s AND DOB=%s AND Site=%s"
+                update_data = (price,quantity, material, dob, site_num)
+                
+                myc.execute(update_query, update_data)
+                con.commit()
+
+                try:
+                    myc.execute(update_query, update_data)
+                    con.commit()
+                except mysql.connector.Error as err:
+                    print("Error:", err)
+
+                print("UPDATED DETAILS\n\n")
+                print("Site no.:", site_num)
+                print("Date:", dob)
+                print("Material:", material)
+                print("Quantity:", quantity)
+                print("Price:Rs", price)
+                print("\n\n\n")
+                success_label.config(text="Data updation successful!", fg='green') 
+            else:
+                success_label.config(text="")
+                messagebox.showerror("Error", "Record doesn't exist!")
            
-           pass
                 
     def clear():
         site_entry.delete(0, tk.END)
@@ -351,7 +424,7 @@ def D_Material_Purchase_page(pwd):
 
                 print("Data deleted\n")
                 print("Site no.:", site_num)
-                print("Time Stamp:", dob)
+                print("Date:", dob)
                 print("Material:", material)
                 print("\n\n\n")
                 success_label.config(text="Data deletion successful!", fg='green')
@@ -360,7 +433,7 @@ def D_Material_Purchase_page(pwd):
                 messagebox.showerror("Error", "Record doesnt exist in Site {}".format(site_num))
         else:
             success_label.config(text="")
-            messagebox.showerror("Error", "Site no., Time Stamp and Material required!")
+            messagebox.showerror("Error", "Site no., Date and Material required!")
 
     def labour():
         root.destroy()
@@ -406,7 +479,7 @@ def D_Material_Purchase_page(pwd):
     material_label = tk.Label(root, text="Material:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
     quantity_label = tk.Label(root, text="Quantity:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
     price_label = tk.Label(root, text="Price:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
-    dob_label = tk.Label(root, text="Timestamp:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
+    dob_label = tk.Label(root, text="Date:", bg=dark_bg, fg=dark_fg, font=('Arial', 10,))
 
     # Error Label for displaying validation messages
     success_label = tk.Label(root, text="", bg=dark_bg, fg='red', font=('Arial', 10))

@@ -67,8 +67,43 @@ def Local_Expenditure_page(pwd, site_num=1):
 
     def update():
         if validate_form():
+            dob = dob_entry.get_date().strftime("%Y%m%d")
+            activity=activity_entry.get()
+
+            myc.execute("SELECT * FROM expenditure WHERE DOB = %s AND Activity=%s AND Site=%s", (dob,material,site_num))
+            existing_record = myc.fetchone()
+
+            if existing_record:
+                # Fetch new details from the user
+                dob = dob_entry.get_date().strftime("%Y%m%d")
+                activity=activity_entry.get()
+                amount=amount_entry.get()
+                
+
+                # Update the record in the database
+                update_query = "UPDATE expenditure SET Amount=%s WHERE Activity = %s AND DOB=%s AND Site=%s"
+                update_data = (amount, activity, dob, site_num)
+                
+                myc.execute(update_query, update_data)
+                con.commit()
+
+                try:
+                    myc.execute(update_query, update_data)
+                    con.commit()
+                except mysql.connector.Error as err:
+                    print("Error:", err)
+
+                print("UPDATED DETAILS\n\n")
+                print("Site no.:", site_num)
+                print("Date:", dob)
+                print("Activity:", activity)
+                print("Amount:Rs", amount)
+                print("\n\n\n")
+                success_label.config(text="Data updation successful!", fg='green') 
+            else:
+                success_label.config(text="")
+                messagebox.showerror("Error", "Record doesn't exist!")
            
-           pass
                 
     def clear():
         amount_entry.delete(0, tk.END)      
@@ -302,8 +337,44 @@ def D_Local_Expenditure_page(pwd):
 
     def update():
         if validate_form():
+            site_num=site_entry.get()
+            dob = dob_entry.get_date().strftime("%Y%m%d")
+            activity=activity_entry.get()
+
+            myc.execute("SELECT * FROM expenditure WHERE DOB = %s AND Activity=%s AND Site=%s", (dob,material,site_num))
+            existing_record = myc.fetchone()
+
+            if existing_record:
+                # Fetch new details from the user
+                dob = dob_entry.get_date().strftime("%Y%m%d")
+                activity=activity_entry.get()
+                amount=amount_entry.get()
+                
+
+                # Update the record in the database
+                update_query = "UPDATE expenditure SET Amount=%s WHERE Activity = %s AND DOB=%s AND Site=%s"
+                update_data = (amount, activity, dob, site_num)
+                
+                myc.execute(update_query, update_data)
+                con.commit()
+
+                try:
+                    myc.execute(update_query, update_data)
+                    con.commit()
+                except mysql.connector.Error as err:
+                    print("Error:", err)
+
+                print("UPDATED DETAILS\n\n")
+                print("Site no.:", site_num)
+                print("Date:", dob)
+                print("Activity:", activity)
+                print("Amount:Rs", amount)
+                print("\n\n\n")
+                success_label.config(text="Data updation successful!", fg='green') 
+            else:
+                success_label.config(text="")
+                messagebox.showerror("Error", "Record doesn't exist!")
            
-           pass
                 
     def clear():
         site_entry.delete(0, tk.END)
