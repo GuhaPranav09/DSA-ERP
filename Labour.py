@@ -5,7 +5,7 @@ def Labour_page(pwd, site_num=1):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Local_Expenditure, Material_Purchase, Staff_Salary
+    import Local_Expenditure, Material_Purchase, Staff_Salary, view_table, Home
 
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
@@ -181,6 +181,13 @@ def Labour_page(pwd, site_num=1):
             success_label.config(text="")
             messagebox.showerror("Error", "Name and Registration number required!")
 
+    def back():
+        root.destroy()
+        Home.Home_page(pwd)
+    
+    def view():
+        view_table.display(pwd, site_num, "labour")
+
     def local_exp():
         root.destroy()
         Local_Expenditure.Local_Expenditure_page(pwd,site_num)
@@ -286,6 +293,8 @@ def Labour_page(pwd, site_num=1):
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
     clear_button.configure(style='TButton')  
+    view_button = ttk.Button(root, text="View table", command=view)
+    back_button = ttk.Button(root, text="Log out", command=back, style='TButton')
 
     # Grid Configuration
     for i in range(12):
@@ -318,7 +327,9 @@ def Labour_page(pwd, site_num=1):
     update_button.grid(row=11, column=2, pady=10)
     delete_button.grid(row=11, column=3, pady=10)
     clear_button.grid(row=11, column=4, pady=10)
-    success_label.grid(row=12, column=1, columnspan=4, pady=10)
+    view_button.grid(row=12, column=2, pady=10)
+    back_button.grid(row=12, column=3, pady=10)
+    success_label.grid(row=13, column=1, columnspan=4, pady=10)
 
     # Navigation bar frame
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
@@ -348,14 +359,14 @@ def Labour_page(pwd, site_num=1):
     # Run the Tkinter main loop
     root.mainloop()
 
-def D_Labour_page(pwd):
+def D_Labour_page(pwd, site_num=0):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Local_Expenditure, Material_Purchase, Staff_Salary, Managers_password
+    import Local_Expenditure, Material_Purchase, Staff_Salary, Managers_password, view_table, Home
 
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
@@ -535,6 +546,13 @@ def D_Labour_page(pwd):
             success_label.config(text="")
             messagebox.showerror("Error", "Site no., Name and Registration number required!")
 
+    def back():
+        root.destroy()
+        Home.Home_page(pwd)
+
+    def view():
+        view_table.D_display(pwd, site_num, "labour")
+
     def local_exp():
         root.destroy()
         Local_Expenditure.D_Local_Expenditure_page(pwd)
@@ -646,6 +664,8 @@ def D_Labour_page(pwd):
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
     clear_button.configure(style='TButton')  
+    view_button = ttk.Button(root, text="View table", command=view)
+    back_button = ttk.Button(root, text="Log out", command=back, style='TButton')
 
     # Grid Configuration
     for i in range(13):
@@ -680,6 +700,8 @@ def D_Labour_page(pwd):
     update_button.grid(row=12, column=2, pady=10)
     delete_button.grid(row=12, column=3, pady=10)
     clear_button.grid(row=12, column=4, pady=10)
+    view_button.grid(row=13, column=2, pady=10)
+    back_button.grid(row=13, column=3, pady=10)
     success_label.grid(row=13, column=1, columnspan=4, pady=10)
 
     # Navigation bar frame

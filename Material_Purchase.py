@@ -5,7 +5,7 @@ def Material_Purchase_page(pwd, site_num=1):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Labour, Local_Expenditure, Staff_Salary
+    import Labour, Local_Expenditure, Staff_Salary, view_table, Home
    
 
     #SQL STARTUP STUFF
@@ -151,6 +151,13 @@ def Material_Purchase_page(pwd, site_num=1):
             success_label.config(text="")
             messagebox.showerror("Error", "Site no., Date and Material required!")
 
+    def back():
+        root.destroy()
+        Home.Home_page(pwd)
+
+    def view():
+        view_table.display(pwd, site_num, "labour")
+
     def labour():
         root.destroy()
         Labour.Labour_page(pwd, site_num)
@@ -222,6 +229,8 @@ def Material_Purchase_page(pwd, site_num=1):
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
     clear_button.configure(style='TButton')  
+    view_button = ttk.Button(root, text="View table", command=view)
+    back_button = ttk.Button(root, text="Log out", command=back, style='TButton')
 
     # Grid Configuration
     for i in range(9):
@@ -246,7 +255,9 @@ def Material_Purchase_page(pwd, site_num=1):
     update_button.grid(row=8, column=2, pady=10)
     delete_button.grid(row=8, column=3, pady=10)
     clear_button.grid(row=8, column=4, pady=10)
-    success_label.grid(row=9, column=1, columnspan=4, pady=10)
+    view_button.grid(row=9, column=2, pady=10)
+    back_button.grid(row=9, column=3, pady=10)
+    success_label.grid(row=10, column=1, columnspan=4, pady=10)
 
     # Navigation bar frame
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
@@ -276,14 +287,14 @@ def Material_Purchase_page(pwd, site_num=1):
     # Run the Tkinter main loop
     root.mainloop()
 
-def D_Material_Purchase_page(pwd):
+def D_Material_Purchase_page(pwd, site_num=0):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     import mysql.connector
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Labour, Local_Expenditure, Staff_Salary, Managers_password
+    import Labour, Local_Expenditure, Staff_Salary, Managers_password, view_table, Home
    
 
     #SQL STARTUP STUFF
@@ -435,6 +446,13 @@ def D_Material_Purchase_page(pwd):
             success_label.config(text="")
             messagebox.showerror("Error", "Site no., Date and Material required!")
 
+    def back():
+        root.destroy()
+        Home.Home_page(pwd)
+
+    def view():
+        view_table.D_display(pwd, site_num, "purchase")
+
     def labour():
         root.destroy()
         Labour.D_Labour_page(pwd)
@@ -511,6 +529,8 @@ def D_Material_Purchase_page(pwd):
     update_button.configure(style='TButton')  
     delete_button.configure(style='TButton')  
     clear_button.configure(style='TButton')  
+    view_button = ttk.Button(root, text="View table", command=view)
+    back_button = ttk.Button(root, text="Log out", command=back, style='TButton')
 
     # Grid Configuration
     for i in range(10):
@@ -537,7 +557,9 @@ def D_Material_Purchase_page(pwd):
     update_button.grid(row=9, column=2, pady=10)
     delete_button.grid(row=9, column=3, pady=10)
     clear_button.grid(row=9, column=4, pady=10)
-    success_label.grid(row=10, column=1, columnspan=4, pady=10)
+    view_button.grid(row=10, column=2, pady=10)
+    back_button.grid(row=10, column=3, pady=10)
+    success_label.grid(row=11, column=1, columnspan=4, pady=10)
 
     # Navigation bar frame
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
