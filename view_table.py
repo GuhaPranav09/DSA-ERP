@@ -24,8 +24,10 @@ def display(pwd, site_number, table_name):
 
         con.close()
 
+    dark_bg='#232323'
     root = tk.Tk()
     root.title(f"{table_name} Table for Site {site_number}")
+    root.configure(bg=dark_bg)  # Dark background color
 
     # Set window size
     root.geometry("1400x600")  
@@ -71,8 +73,10 @@ def D_display(pwd, site_num, table_name):
 
         con.close()
 
+    dark_bg='#232323'
     root = tk.Tk()
     root.title(f"{table_name} Table")
+    root.configure(bg=dark_bg)  # Dark background color
 
     # Set window size
     root.geometry("1400x600")  
