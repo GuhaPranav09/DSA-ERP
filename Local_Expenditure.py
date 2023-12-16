@@ -255,8 +255,6 @@ def Local_Expenditure_page(pwd, site_num=1):
     nav_bar_frame = tk.Frame(root, bg="#777777")
     nav_bar_frame.grid(row=0, column=1, columnspan=7, sticky="news")
 
-    
-
     # Buttons in the navigation bar
     home_button = ttk.Button(nav_bar_frame, text="Local Expenditure")
     manager_button = ttk.Button(nav_bar_frame, text="Material Purchase", command=material)
