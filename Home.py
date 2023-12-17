@@ -1,10 +1,10 @@
-def Home_page(pwd):
-    
+def Home_page(pwd): 
     import tkinter as tk
     from tkinter import ttk, Label
     from PIL import Image, ImageTk
-
+    import Login
     import mysql.connector
+
     
     #SQL STARTUP STUFF
     con = mysql.connector.connect(host='localhost', user='root', passwd=pwd)
@@ -17,7 +17,7 @@ def Home_page(pwd):
     myc.execute("use user_info")
     myc.execute("create table if not exists login(Site int, username varchar (50), password varchar (50))")
 
-    import Login
+    
     def open_manager_page():
         root.destroy()
         Login.Manager_login_page(pwd)
@@ -72,5 +72,10 @@ def Home_page(pwd):
     root.mainloop()
 
 if __name__ == '__main__':
-    pwd = input()
+    from tkinter import simpledialog
+    import tkinter as tk
+    root = tk.Tk()
+    root.withdraw()
+    pwd = simpledialog.askstring("Database Setup", "Enter MySQL Password:\t\t\t", show="*")
+    root.destroy()
     Home_page(pwd)

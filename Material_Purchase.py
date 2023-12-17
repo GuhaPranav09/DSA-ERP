@@ -605,4 +605,4 @@ def D_Material_Purchase_page(pwd, site_num=0):
     root.mainloop()
 
 if __name__ == '__main__':
-    D_Material_Purchase_page("mysql")
+    Material_Purchase_page("mysql")

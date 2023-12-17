@@ -407,4 +407,4 @@ def D_Report_page(pwd, site_num=0):
 
 
 if __name__ == '__main__':
-    D_Report_page("mysql")
+    Report_page("mysql")

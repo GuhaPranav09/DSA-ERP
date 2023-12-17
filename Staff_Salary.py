@@ -559,4 +559,4 @@ def D_Staff_Salary_page(pwd, site_num=0):
 
 
 if __name__ == '__main__':
-    D_Staff_Salary_page("mysql")
+    Staff_Salary_page("mysql")
