@@ -112,7 +112,7 @@ def D_report_page(pwd, site_num=0):
         return [str(year) for year in range(2015, current_year + 1)]
 
     def view_report(category, selected_year, selected_month, site_num):
-        if not (category and selected_year and selected_month):
+        if not (category and selected_year and selected_month and site_num):
             messagebox.showerror("Error", "Please select an option for each field.")
             return
         elif selected_year=="All Years" and selected_month!="Overall":

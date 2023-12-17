@@ -6,7 +6,7 @@ def Password_Page(pwd, site_num=0):
     import datetime
     from tkcalendar import Calendar, DateEntry
     from PIL import Image, ImageTk
-    import Labour, Local_Expenditure, Material_Purchase, Staff_Salary, view_table, Home
+    import Labour, Local_Expenditure, Material_Purchase, Staff_Salary, view_table, Home, View_Report
 
 
     #SQL STARTUP STUFF
@@ -163,6 +163,10 @@ def Password_Page(pwd, site_num=0):
         root.destroy()
         Staff_Salary.D_Staff_Salary_page(pwd)
 
+    def report():
+        root.destroy()
+        View_Report.D_Report_page(pwd)
+
 
     # Colors
     dark_bg='#232323'
@@ -231,7 +235,7 @@ def Password_Page(pwd, site_num=0):
     insert_button.grid(row=8, column=1, pady=10)
     update_button.grid(row=8, column=2, pady=10)
     delete_button.grid(row=8, column=3, pady=10)
-    clear_button.grid(row=8, column=4, pady=10)
+    clear_button.grid(row=8, column=4, pady=10, padx=[0,50])
     view_button.grid(row=9, column=2, pady=10)
     back_button.grid(row=9, column=3, pady=10)
     success_label.grid(row=10, column=1, columnspan=4, pady=10)
@@ -248,6 +252,8 @@ def Password_Page(pwd, site_num=0):
     accounts_button = ttk.Button(nav_bar_frame, text="Managers")
     director_button = ttk.Button(nav_bar_frame, text="Labour", command=labour)
     exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary", command=salary)
+    report_button = ttk.Button(nav_bar_frame, text="Report", command=report)
+    report_button.configure(style='TButton')
     home_button.configure(style='TButton')  # Apply the style to the button
     manager_button.configure(style='TButton')  
     accounts_button.configure(style='TButton')  
@@ -255,11 +261,12 @@ def Password_Page(pwd, site_num=0):
     exit_button.configure(style='TButton')
 
     # Grid placement for navigation bar buttonexit
-    home_button.grid(row=0, column=0, padx=[100,10], pady=10)
-    manager_button.grid(row=0, column=1, padx=10, pady=10)
-    accounts_button.grid(row=0, column=2, padx=10, pady=10)
-    director_button.grid(row=0, column=3, padx=10, pady=10)
-    exit_button.grid(row=0, column=4, padx=[10,100], pady=10)
+    home_button.grid(row=0, column=1, padx=[100,10], pady=10)
+    manager_button.grid(row=0, column=2, padx=10, pady=10)
+    report_button.grid(row=0, column=3, padx=10, pady=10)
+    accounts_button.grid(row=0, column=4, padx=10, pady=10)
+    director_button.grid(row=0, column=5, padx=10, pady=10)
+    exit_button.grid(row=0, column=6, padx=[10,100], pady=10)
 
 
     # Run the Tkinter main loop

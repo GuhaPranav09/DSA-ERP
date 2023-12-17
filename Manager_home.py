@@ -2,9 +2,13 @@ def Manager_Home_Page(pwd,site_num,username):
     import tkinter as tk
     from tkinter import ttk,Label, messagebox
     from PIL import Image, ImageTk
-    import Labour, Local_Expenditure, Material_Purchase, Staff_Salary
+    import Labour, Local_Expenditure, Material_Purchase, Staff_Salary, View_Report, Home
    
 
+    def back():
+        root.destroy()
+        Home.Home_page(pwd)
+    
     def labour():
         root.destroy()
         Labour.Labour_page(pwd, site_num)
@@ -20,6 +24,10 @@ def Manager_Home_Page(pwd,site_num,username):
     def salary():
         root.destroy()
         Staff_Salary.Staff_Salary_page(pwd, site_num)
+
+    def report():
+        root.destroy()
+        View_Report.D_Report_page(pwd)
 
 
     # Colors
@@ -54,8 +62,11 @@ def Manager_Home_Page(pwd,site_num,username):
     company_name_label.grid(row=1, column=3, columnspan=3, sticky="n", pady=5)  
     page_name_label.grid(row=2, column=3, columnspan=3, sticky="n", pady=5)
     company_logo_label.grid(row=3, column=3, columnspan=3, sticky="n", pady=5) 
-    welcome_label.grid(row=4, column=3, columnspan=3, sticky="n", pady=[100,5])
-    message_label.grid(row=5,column=1, columnspan=7, sticky="n",pady=[5,100])
+    welcome_label.grid(row=4, column=3, columnspan=3, sticky="n", pady=[75,5])
+    message_label.grid(row=5,column=1, columnspan=7, sticky="n",pady=[5,75])
+
+    back_button = ttk.Button(root, text="Log out", command=back, style='TButton')
+    back_button.grid(row=6, column=4, pady=[5, 30])
 
     # Navigation bar frame
     nav_bar_frame2 = tk.Frame(root, bg="#777777")
@@ -69,6 +80,8 @@ def Manager_Home_Page(pwd,site_num,username):
     manager_button = ttk.Button(nav_bar_frame, text="Material Purchase",command=material)
     director_button = ttk.Button(nav_bar_frame, text="Labour", command=labour)
     exit_button = ttk.Button(nav_bar_frame, text="Staff-Salary", command=salary)
+    report_button = ttk.Button(nav_bar_frame, text="Report", command=report)
+    report_button.configure(style='TButton')
     home_button.configure(style='TButton')  # Apply the style to the button
     manager_button.configure(style='TButton')  
     director_button.configure(style='TButton')  
@@ -77,8 +90,9 @@ def Manager_Home_Page(pwd,site_num,username):
     # Grid placement for navigation bar buttonexit
     home_button.grid(row=0, column=1, padx=[100,10], pady=10)
     manager_button.grid(row=0, column=2, padx=10, pady=10)
-    director_button.grid(row=0, column=3, padx=10, pady=10)
-    exit_button.grid(row=0, column=4, padx=[10,100], pady=10)
+    report_button.grid(row=0, column=3, padx=10,pady=10)
+    director_button.grid(row=0, column=4, padx=10, pady=10)
+    exit_button.grid(row=0, column=5, padx=[10,100], pady=10)
 
 
     # Run the Tkinter main loop
