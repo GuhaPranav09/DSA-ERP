@@ -13,7 +13,7 @@ def Material_Purchase_page(pwd, site_num=1):
     myc = con.cursor()
 
     myc.execute("use user_info")
-    myc.execute("create table if not exists purchase(Site int, Material int, Quantity int, Price int, DOB date)")
+    myc.execute("create table if not exists purchase(Site int, Material varchar(25), Quantity int, Price int, DOB date)")
     con.commit()
 
     # Function to validate the form before submission
